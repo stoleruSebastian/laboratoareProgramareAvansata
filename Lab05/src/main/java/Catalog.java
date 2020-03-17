@@ -7,6 +7,11 @@ public class Catalog implements Serializable {
     private String path;
     private List<Document> documents = new ArrayList<>();
 
+    public Catalog(String name, String path) {
+        this.name=name;
+        this.path=path;
+    }
+
     public String getName() {
         return name;
     }
