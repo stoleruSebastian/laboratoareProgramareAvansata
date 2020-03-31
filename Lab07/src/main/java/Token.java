@@ -31,7 +31,10 @@ public class Token {
         this.number = value;
     }
 
-
-
-
+    @Override
+    public String toString() {
+        return "Token{" +
+                "number=" + number +
+                '}';
+    }
 }
