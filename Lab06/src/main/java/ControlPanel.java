@@ -1,5 +1,6 @@
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.image.BufferedImage;
@@ -32,24 +33,43 @@ public class ControlPanel extends JPanel {
     }
 
     private void save(ActionEvent e) {
-        try {
-           ImageIO.write(frame.canvas.image, "PNG", new File("d:/test.png"));
-        } catch (IOException ex) {
-            System.err.println(ex);
-        }
+            JFrame parentFrame = new JFrame();
+            JFileChooser fileChooser = new JFileChooser();
+            fileChooser.setDialogTitle("Save image");
+            int userSelection = fileChooser.showSaveDialog(parentFrame);
+            fileChooser.setFileFilter(new FileNameExtensionFilter("*.png", "png"));
+            if (userSelection == JFileChooser.APPROVE_OPTION) {
+                File fileToSave = fileChooser.getSelectedFile();
+                System.out.println("Save as file: " + fileToSave.getAbsolutePath());
+                try {
+                    ImageIO.write(frame.canvas.image, "PNG", new File(fileToSave.getAbsolutePath()));
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
+            }
+
+
     }
 
     private void load(ActionEvent e) {
-        try {
-           frame.canvas.image= ImageIO.read( new File("d:/test.png"));
-           frame.canvas.graphics = frame.canvas.image.createGraphics();
-           frame.canvas.repaint();
-
-
-        } catch (IOException ex) {
-            System.err.println(ex);
+        JFrame parentFrame = new JFrame();
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setDialogTitle("Load image");
+        int userSelection = fileChooser.showSaveDialog(parentFrame);
+        fileChooser.setFileFilter(new FileNameExtensionFilter("*.png", "png"));
+        if (userSelection == JFileChooser.APPROVE_OPTION) {
+            File fileToLoad = fileChooser.getSelectedFile();
+            try {
+                frame.canvas.image = ImageIO.read(fileToLoad);
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
         }
+
+        frame.canvas.graphics = frame.canvas.image.createGraphics();
+        frame.canvas.repaint();
     }
+
 
     private void reset(ActionEvent e) {
         frame.canvas.image = new BufferedImage(800, 600, BufferedImage.TYPE_INT_ARGB);
